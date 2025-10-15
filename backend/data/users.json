@@ -1,0 +1,11 @@
+[
+{
+"id": 1,
+"nome": "Revendedor Teste Aprovado",
+"cnpj": "12345678901234",
+"email": "teste@ourobranco.com",
+"senha": "senha123",
+"role": "revendedor",
+"status": "aprovado"
+}
+]
