@@ -1,47 +1,43 @@
-// backend/controllers/produto-controller.js
+// backend/controllers/produto-controller.js (Sem alterações, usa a função automatizada)
 
-// DADOS FALSOS (MOCK) - Usado para teste
-const mockProdutos = [
-  {
-    id: 1,
-    codigo: 'INT-CAM-1010',
-    nome: 'Câmera Intelbras VHD 1010 G5',
-    marca: 'Intelbras',
-    preco_base: 150.00,
-    estoque: 50
-  },
-  {
-    id: 2,
-    codigo: 'FRM-AMP-SLIM2000',
-    nome: 'Amplificador Frahm Slim 2000',
-    marca: 'Frahm',
-    preco_base: 450.00,
-    estoque: 25
-  },
-  {
-    id: 3,
-    codigo: 'AVT-SUP-TETO',
-    nome: 'Suporte de Teto para Projetor Avatron',
-    marca: 'Avatron',
-    preco_base: 95.50,
-    estoque: 120
-  }
-];
+const axios = require('axios');
+const getBimerAuthToken = require('../utils/getBimerToken'); 
 
+const BIMER_API_BASE_URL = 'http://192.168.5.16:8085/api/produtosmaster'; 
 
-// Função que será chamada pela rota para listar os produtos
-const listarProdutos = (req, res) => {
-  try {
-    // Retorna a lista de produtos falsos
-    res.status(200).json(mockProdutos);
-  } catch (error) {
-    // A função de debug (morgan) registrará a requisição,
-    // e este erro retornará o status 500 caso algo dê errado.
-    res.status(500).json({ message: 'Erro interno ao buscar produtos.' });
-  }
-};
+exports.getProdutoDetalhe = async (req, res) => {
+    const { codigo } = req.params; 
 
-// Exporta a função
-module.exports = {
-  listarProdutos,
+    try {
+        // 1. OBTÉM OU GERA O TOKEN DE ACESSO AUTOMATICAMENTE
+        const token = await getBimerAuthToken(); 
+
+        // 2. FAZ A REQUISIÇÃO PARA A API BIMER
+        const response = await axios.get(BIMER_API_BASE_URL, {
+            params: { codigo: codigo },
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        return res.status(200).json({ success: true, data: response.data });
+
+    } catch (error) {
+        // ... (Lógica de tratamento de erro para 400, 401, etc.)
+        if (error.message.includes('Falha na autenticação com a API Bimer')) {
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Erro de autenticação com a API Bimer.',
+                detail: 'O login está sendo rejeitado com Status 400. Requisito de Client ID ou Ambiente não atendido.'
+            });
+        }
+        
+        const detail = error.response?.status 
+            ? `Status code ${error.response.status} (${error.response.statusText})` 
+            : error.message;
+
+        return res.status(500).json({ 
+            success: false, 
+            message: 'Erro ao conectar ou processar dados da API Bimer.',
+            detail: detail
+        });
+    }
 };

@@ -3,10 +3,14 @@
 const express = require('express');
 const router = express.Router();
 
-// CORREÇÃO: Usa o caminho relativo correto para encontrar a pasta 'controllers' dentro de 'backend'
+// Importa os controllers
+const produtoIndexController = require('../controllers/produto-index-controller');
 const produtoController = require('../controllers/produto-controller');
 
-// Define a rota GET para a raiz ('/') que resulta em GET /api/produtos
-router.get('/', produtoController.listarProdutos);
+
+router.get('/index', produtoIndexController.getProdutosIndex);
+
+
+router.get('/:codigo', produtoController.getProdutoDetalhe); 
 
 module.exports = router;

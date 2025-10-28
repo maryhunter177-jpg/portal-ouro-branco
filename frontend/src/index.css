@@ -1,17 +1,31 @@
-/* frontend/src/index.css é essencial para o funcionamento do Tailwind CSS no seu projeto React. */
+/* frontend/src/index.css */
 
-/* Ele importa as diretivas base, components e utilities que o Tailwind gera. */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Reset Básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-/* * Estilos globais (opcional, mas recomendado para fontes e cor de fundo) 
- */
-
-/* Define a fonte Inter (padrão) e garante a cor de fundo */
+/* Corpo e Fontes */
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #F8F8F8; /* Um cinza muito claro */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #FFFFFF; /* Fundo Branco */
+    color: #000000; /* Texto Preto */
+}
+
+/* Link padrão */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Estilo para focar em botões e inputs */
+button:focus, input:focus {
+    outline: 2px solid #FFD700; /* Foco Dourado */
+    outline-offset: 2px;
 }
